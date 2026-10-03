@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Task Management System</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>Task Management System</h1>
+        <p>Manage your daily tasks easily</p>
+    </header>
+
+    <main>
+
+        <section class="task-form">
+            <h2>Add New Task</h2>
+
+            <form action="/add" method="POST">
+
+                <label for="title">Task Title</label>
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="Enter task title"
+                    required
+                >
+
+                <label for="description">Description</label>
+                <textarea
+                    id="description"
+                    name="description"
+                    placeholder="Enter task description"
+                    rows="4"
+                ></textarea>
+
+                <button type="submit">Add Task</button>
+
+            </form>
+        </section>
+
+
+        <section class="task-list">
+
+            <h2>My Tasks</h2>
+
+            {% if tasks %}
+
+                {% for task in tasks %}
+
+                <div class="task-card">
+
+                    <div class="task-content">
+
+                        <h3>{{ task["title"] }}</h3>
+
+                        <p>{{ task["description"] }}</p>
+
+                        <span class="status">
+                            {{ task["status"] }}
+                        </span>
+
+                    </div>
+
+                    <div class="task-actions">
+
+                        {% if task["status"] == "Pending" %}
+
+                        <a
+                            href="{{ url_for('complete_task', task_id=task['id']) }}"
+                            class="complete-btn"
+                        >
+                            Complete
+                        </a>
+
+                        {% endif %}
+
+                        <a
+                            href="{{ url_for('delete_task', task_id=task['id']) }}"
+                            class="delete-btn"
+                            onclick="return confirm('Are you sure you want to delete this task?');"
+                        >
+                            Delete
+                        </a>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p class="no-tasks">No tasks available. Add your first task!</p>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Project 3 - Practical Implementation Project</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>
